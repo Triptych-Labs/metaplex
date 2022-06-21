@@ -22,7 +22,8 @@ import {
   createAccountsForMint,
   getCandyMachineState,
   getCollectionPDA,
-  mintOneToken,
+  // mintOneToken,
+  mintManyTokens,
   SetupState,
 } from "./candy-machine";
 import { AlertState, formatNumber, getAtaForMint, toDate } from "./utils";
@@ -31,6 +32,7 @@ import { MintButton } from "./MintButton";
 import { GatewayProvider } from "@civic/solana-gateway-react";
 import { sendTransaction } from "./connection";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import { TextField } from "@mui/material";
 
 const ConnectButton = styled(WalletDialogButton)`
   width: 100%;
@@ -342,7 +344,8 @@ const Home = (props: HomeProps) => {
           });
         }
 
-        let mintResult = await mintOneToken(
+        let mintResult = await mintManyTokens(
+          2,
           candyMachine,
           wallet.publicKey,
           beforeTransactions,
@@ -583,6 +586,16 @@ const Home = (props: HomeProps) => {
                   </Grid>
                 </Grid>
               )}
+              <div
+                style={{
+                  color: "white",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <TextField>hello</TextField>
+              </div>
               <MintContainer>
                 {candyMachine?.state.isActive &&
                 candyMachine?.state.gatekeeper &&
@@ -742,4 +755,3 @@ const getCountdownDate = (
 };
 
 export default Home;
-
