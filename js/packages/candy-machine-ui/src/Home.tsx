@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import * as anchor from "@project-serum/anchor";
 
 import styled from "styled-components";
-import { Container, Snackbar } from "@material-ui/core";
+import { Button, Container, Snackbar } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import Alert from "@material-ui/lab/Alert";
 import Grid from "@material-ui/core/Grid";
@@ -72,6 +72,7 @@ const Home = (props: HomeProps) => {
   const [discountPrice, setDiscountPrice] = useState<anchor.BN>();
   const [needTxnSplit, setNeedTxnSplit] = useState(true);
   const [setupTxn, setSetupTxn] = useState<SetupState>();
+  const [amount, setAmount ] = useState(1);
 
   const rpcUrl = props.rpcHost;
   const wallet = useWallet();
@@ -345,7 +346,7 @@ const Home = (props: HomeProps) => {
         }
 
         let mintResult = await mintManyTokens(
-          2,
+          amount,
           candyMachine,
           wallet.publicKey,
           beforeTransactions,
@@ -479,6 +480,17 @@ const Home = (props: HomeProps) => {
     })();
   }, [refreshCandyMachineState]);
 
+
+  const onIncrement = useCallback(() => {
+    if (amount >= 2) return;
+    setAmount(amount + 1);
+  }, [amount, setAmount])
+
+  const onDecrement = useCallback(() => {
+    if (amount == 1) return;
+    setAmount(amount - 1);
+  }, [amount, setAmount])
+
   return (
     <Container style={{ marginTop: 100 }}>
       <Container maxWidth="xs" style={{ position: "relative" }}>
@@ -586,16 +598,57 @@ const Home = (props: HomeProps) => {
                   </Grid>
                 </Grid>
               )}
-              <div
+                <div style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: 'white',
+                  fontSize: '1.25rem',
+                }}>
+                Amount
+                </div>
+                
+              <Grid
+                container
                 style={{
-                  color: "white",
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
                 }}
               >
-                <TextField>hello</TextField>
-              </div>
+                <Grid item xs={3}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                >
+                  <Button style={{backgroundColor: 'white'}} onClick={onDecrement}>
+                  -
+                  </Button>
+                </Grid>
+                <Grid item xs={3}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                >
+                  <TextField disabled={true} value={amount} inputProps={{min: 0, style: { textAlign: 'center', color: 'white !important' }}} />
+                </Grid>
+                <Grid item xs={3}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                >
+                  <Button style={{backgroundColor: 'white'}} onClick={onIncrement}>
+                  +
+                  </Button>
+                </Grid>
+              </Grid>
+              <br></br>
               <MintContainer>
                 {candyMachine?.state.isActive &&
                 candyMachine?.state.gatekeeper &&
@@ -712,7 +765,7 @@ const Home = (props: HomeProps) => {
             display="block"
             style={{ marginTop: 7, color: "grey" }}
           >
-            Powered by METAPLEX
+            Powered by Triptych Labs
           </Typography>
         </Paper>
       </Container>

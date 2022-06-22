@@ -18,7 +18,7 @@ import {
 } from "./utils";
 
 export const CANDY_MACHINE_PROGRAM = new anchor.web3.PublicKey(
-  "6N7PRNQUSpmEZfmDmLQs7eNBWQgP66RdC1RXomAT6rsL"
+  "5WTCguyGQDrFosVn8M9JynwdoRpQJUPuzaembMwug35r"
 );
 
 const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
